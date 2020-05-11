@@ -72,10 +72,6 @@ $ ./dkr_b_and_p.sh
 $ kubectl apply -f localstack.yaml
 ```
 
-## Create S3 connection in airflow
-- Conn Id: localstack_s3
-- Extra: {"host": "http://localstack:4572"}
-
 ## Create S3 bucket
 ```shell
 $ aws --endpoint-url=http://localstack.local s3 mb s3://airflow
@@ -86,6 +82,13 @@ $ aws --endpoint-url=http://localstack.local s3 mb s3://airflow
 $ kubectl apply -f webserver.yaml
 $ kubectl apply -f scheduler.yaml
 ```
+
+## Create S3 connection in airflow
+- Conn Id: localstack_s3
+- Extra: {"host": "http://localstack:4572"}
+
+## Test DAG
+Once the DAG shows up (takes some time at the beginning), then enable and run it.
 
 ## Tear down
 ```shell
