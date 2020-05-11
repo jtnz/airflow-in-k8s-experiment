@@ -27,18 +27,16 @@ spec:
               value: postgresql://airflow:password@airflow-postgresql:5432/airflow
             - name: AIRFLOW__CORE__EXECUTOR
               value: KubernetesExecutor
-            # - name: AIRFLOW__KUBERNETES__GIT_REPO
-            #   value: https://github.com/jtnz/airflow-in-k8s-experiment.git
-            # - name: AIRFLOW__KUBERNETES__GIT_SUBPATH
-            #   value: dags
-            # - name: AIRFLOW__KUBERNETES__GIT_BRANCH
-            #   value: master
-            # - name: AIRFLOW__KUBERNETES__GIT_DAGS_FOLDER_MOUNT_POINT
-            #   value: '{AIRFLOW_HOME}/dags'
-            # - name: AIRFLOW__KUBERNETES__DAGS_IN_IMAGE
-            #   value: "true"
-            # - name: AIRFLOW__CORE__DAGS_FOLDER
-            #   value: /dags
+            - name: AIRFLOW__KUBERNETES__GIT_REPO
+              value: https://github.com/jtnz/airflow-in-k8s-experiment.git
+            - name: AIRFLOW__KUBERNETES__GIT_BRANCH
+              value: master
+            - name: AIRFLOW__KUBERNETES__GIT_SUBPATH
+              value: dags
+            - name: AIRFLOW__KUBERNETES__GIT_DAGS_FOLDER_MOUNT_POINT
+              value: /dags
+            - name: AIRFLOW__CORE__DAGS_FOLDER
+              value: /dags/repo/dags
           readinessProbe:
             httpGet:
               path: /admin/
@@ -47,6 +45,28 @@ spec:
             requests:
               cpu: 100m
               memory: 512Mi
+          volumeMounts:
+          - mountPath: /dags
+            name: git
+        - name: git-sync
+          image: k8s.gcr.io/git-sync:v3.1.6
+          env:
+            - name: GIT_SYNC_REPO
+              value: https://github.com/jtnz/airflow-in-k8s-experiment.git
+            - name: GIT_SYNC_BRANCH
+              value: master
+            - name: GIT_SYNC_DEST
+              value: repo
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+          volumeMounts:
+          - mountPath: /tmp/git
+            name: git
+      volumes:
+      - name: git
+        emptyDir: {}
 ---
 apiVersion: v1
 kind: Service
