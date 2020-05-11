@@ -83,7 +83,7 @@ $ k3d delete --name airflow
 - ~dags in image~
 - ~start a pod for dag~
 - ~pod image?~
-- dags from git
+- ~dags from git~
 - logs in UI
 - convert this to a script to start it all
 - generate airflow db user password
