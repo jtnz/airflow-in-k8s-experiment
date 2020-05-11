@@ -67,16 +67,25 @@ $ fg
 $ ./dkr_b_and_p.sh
 ```
 
-## Apply our k8s resources
+## Run localstack for local S3
 ```shell
 $ kubectl apply -f localstack.yaml
+```
+
+## Create S3 connection in airflow
+- Conn Id: localstack_s3
+- Extra: {"host": "http://localstack:4572"}
+
+## Create S3 bucket
+```shell
+$ aws --endpoint-url=http://localstack.local s3 mb s3://airflow
+```
+
+## Apply airflow k8s resources
+```shell
 $ kubectl apply -f webserver.yaml
 $ kubectl apply -f scheduler.yaml
 ```
-
-## Create S3 connection
-- Conn Id: localstack_s3
-- Extra: {"host": "http://localstack:4572"}
 
 ## Tear down
 ```shell
