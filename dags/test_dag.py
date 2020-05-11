@@ -6,7 +6,7 @@ from airflow.utils.dates import days_ago
 default_args = {
     'owner': 'jeff',
     'depends_on_past': False,
-    'start_date': days_ago(2),
+    'start_date': days_ago(0),
     'email': ['airflow@example.com'],
     'email_on_failure': False,
     'email_on_retry': False,
@@ -17,7 +17,7 @@ dag = DAG(
     'dag-from-git',
     default_args=default_args,
     description='A simple tutorial DAG',
-    schedule_interval=timedelta(minutes=1),
+    schedule_interval=timedelta(minutes=2),
 )
 
 # t1, t2 and t3 are examples of tasks created by instantiating operators
