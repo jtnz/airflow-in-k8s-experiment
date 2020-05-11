@@ -69,9 +69,14 @@ $ ./dkr_b_and_p.sh
 
 ## Apply our k8s resources
 ```shell
+$ kubectl apply -f localstack.yaml
 $ kubectl apply -f webserver.yaml
 $ kubectl apply -f scheduler.yaml
 ```
+
+## Create S3 connection
+- Conn Id: localstack_s3
+- Extra: {"host": "http://localstack:4572"}
 
 ## Tear down
 ```shell
@@ -88,3 +93,6 @@ $ k3d delete --name airflow
 - convert this to a script to start it all
 - generate airflow db user password
 - separate namespaces for airflow webserver/scheduler and pods running as part of dags?
+- connection setup (s3)
+- bucket setup (airflow)
+- fernet key?

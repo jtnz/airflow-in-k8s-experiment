@@ -1,0 +1,67 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: localstack
+  namespace: airflow
+  labels:
+    app: localstack
+spec:
+  selector:
+    matchLabels:
+      app: localstack
+  template:
+    metadata:
+      labels:
+        app: localstack
+    spec:
+      containers:
+        - name: localstack
+          image: localstack/localstack
+          ports:
+            - containerPort: 4572
+              name: s3
+          env:
+            - name: SERVICES
+              value: s3
+            - name: HOSTNAME_EXTERNAL
+              value: localstack.local
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: localstack
+  namespace: airflow
+  labels:
+    app: localstack
+spec:
+  selector:
+    app: localstack
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+    - name: s3
+      port: 4572
+      targetPort: s3
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: localstack
+  namespace: airflow
+  labels:
+    app: localstack
+spec:
+  rules:
+    - host: localstack.local
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: localstack
+              servicePort: s3
