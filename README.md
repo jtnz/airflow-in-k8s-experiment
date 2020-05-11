@@ -1,11 +1,12 @@
 # Airflow on k8s experiment
+This experiment is to get [airflow](https://github.com/apache/airflow) running on k8s, and executing dags using the KubernetesExecutor.
 
 ## Local setup
 ### DNS
-Get yourself setup with local DNS resolution for *.local to 127.0.0.1.
+Get yourself setup with local DNS resolution for `*.local` to `127.0.0.1`.
 
 ### Tools
-Make sure you up to date tools, you'll need:
+Make sure you have up to date tools. You'll need:
 - `k3d`
 - `kubectl`
 - `helm`
