@@ -70,11 +70,8 @@ $ ./dkr_b_and_p.sh
 ## Run localstack for local S3
 ```shell
 $ kubectl apply -f localstack.yaml
-```
-
-## Create S3 bucket
-```shell
-$ aws --endpoint-url=http://localstack.local s3 mb s3://airflow
+$ watch kubectl -nairflow get pods
+# Wait until the localstack pod is ready
 ```
 
 ## Apply airflow k8s resources
@@ -83,9 +80,15 @@ $ kubectl apply -f webserver.yaml
 $ kubectl apply -f scheduler.yaml
 ```
 
+You can now visit [airflow](http://airflow.local/admin/).
+
+Note: it can take several minutes before the DAGs show up.
+
 ## Create S3 connection in airflow
+- Admin > Connections > Create
 - Conn Id: localstack_s3
-- Extra: {"host": "http://localstack:4572"}
+- Conn Type: S3
+- Extra: {"host": "http://localstack:4566"}
 
 ## Test DAG
 Once the DAG shows up (takes some time at the beginning), then enable and run it.
@@ -106,5 +109,5 @@ $ k3d delete --name airflow
 - generate airflow db user password
 - separate namespaces for airflow webserver/scheduler and pods running as part of dags?
 - connection setup (s3)
-- bucket setup (airflow)
-- fernet key?
+- ~s3 bucket setup (airflow)~
+- auto-generate fernet key

@@ -86,6 +86,10 @@ spec:
               value: s3://airflow/logs
             - name: AIRFLOW__CORE__REMOTE_LOG_CONN_ID
               value: localstack_s3
+            - name: AIRFLOW__KUBERNETES__DELETE_WORKER_PODS
+              value: 'False'
+            - name: AIRFLOW__CORE__LOGGING_LEVEL
+              value: DEBUG
           resources:
             requests:
               cpu: 100m

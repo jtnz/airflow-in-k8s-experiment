@@ -19,7 +19,7 @@ spec:
         - name: localstack
           image: localstack/localstack
           ports:
-            - containerPort: 4572
+            - containerPort: 4566
               name: s3
           env:
             - name: SERVICES
@@ -30,6 +30,23 @@ spec:
             requests:
               cpu: 100m
               memory: 512Mi
+          volumeMounts:
+            - name: localstack-init
+              mountPath: /docker-entrypoint-initaws.d
+              readOnly: true
+      volumes:
+        - name: localstack-init
+          configMap:
+            name: localstack-init
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: localstack-init
+  namespace: airflow
+data:
+  init_s3.sh: |
+    awslocal s3 mb s3://airflow
 ---
 apiVersion: v1
 kind: Service
@@ -46,22 +63,5 @@ spec:
       port: 80
       targetPort: http
     - name: s3
-      port: 4572
+      port: 4566
       targetPort: s3
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: localstack
-  namespace: airflow
-  labels:
-    app: localstack
-spec:
-  rules:
-    - host: localstack.local
-      http:
-        paths:
-          - path: /
-            backend:
-              serviceName: localstack
-              servicePort: s3

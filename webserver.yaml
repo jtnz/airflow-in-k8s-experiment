@@ -29,6 +29,8 @@ spec:
               value: KubernetesExecutor
             - name: AIRFLOW__CORE__FERNET_KEY
               value: PUlSbKcKvEHVJew0x6tLlHOIjjTTlpzU8KRJE5vItXM=
+            - name: AIRFLOW_CONN_LOCALSTACK_S3
+              value: 's3://?aws_access_key_id=123&aws_secret_access_key=123&host=http%3A%2F%2Flocalstack%3A4566'
             - name: AIRFLOW__KUBERNETES__GIT_REPO
               value: https://github.com/jtnz/airflow-in-k8s-experiment.git
             - name: AIRFLOW__KUBERNETES__GIT_BRANCH
@@ -45,6 +47,8 @@ spec:
               value: s3://airflow/logs
             - name: AIRFLOW__CORE__REMOTE_LOG_CONN_ID
               value: localstack_s3
+            - name: AIRFLOW__CORE__LOGGING_LEVEL
+              value: DEBUG
           readinessProbe:
             httpGet:
               path: /admin/
