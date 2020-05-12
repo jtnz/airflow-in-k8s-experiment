@@ -25,7 +25,7 @@ spec:
             - name: SERVICES
               value: s3
             - name: HOSTNAME_EXTERNAL
-              value: localstack.local
+              value: localstack
           resources:
             requests:
               cpu: 100m

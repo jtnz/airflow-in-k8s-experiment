@@ -90,6 +90,8 @@ spec:
               value: 'False'
             - name: AIRFLOW__CORE__LOGGING_LEVEL
               value: DEBUG
+            - name: AIRFLOW__CORE__LOGGING_CONFIG_CLASS
+              value: airflow.config_templates.airflow_local_settings.DEFAULT_LOGGING_CONFIG
           resources:
             requests:
               cpu: 100m
