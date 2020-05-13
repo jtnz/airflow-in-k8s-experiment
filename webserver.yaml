@@ -22,27 +22,6 @@ spec:
           ports:
             - containerPort: 8080
               name: http
-          env:
-            - name: AIRFLOW__CORE__SQL_ALCHEMY_CONN
-              value: postgresql://airflow:password@airflow-postgresql:5432/airflow
-            - name: AIRFLOW__CORE__FERNET_KEY
-              value: PUlSbKcKvEHVJew0x6tLlHOIjjTTlpzU8KRJE5vItXM=
-            # - name: AIRFLOW_CONN_LOCALSTACK_S3
-            #   value: "s3://?aws_access_key_id=123&aws_secret_access_key=123&host=http%3A%2F%2Flocalstack%3A4566"
-            - name: AIRFLOW__CORE__DAGS_FOLDER
-              value: /dags/repo/dags
-            - name: AIRFLOW__CORE__REMOTE_LOGGING
-              value: "True"
-            - name: AIRFLOW__CORE__REMOTE_BASE_LOG_FOLDER
-              value: s3://airflow/logs
-            - name: AIRFLOW__CORE__REMOTE_LOG_CONN_ID
-              value: localstack_s3
-            - name: AIRFLOW__CORE__LOGGING_LEVEL
-              value: DEBUG
-            - name: AIRFLOW__CORE__LOGGING_CONFIG_CLASS
-              value: airflow.config.logging_config.LOGGING_CONFIG
-            # - name: AIRFLOW__CORE__TASK_LOG_READER
-            #   value: s3.task
           readinessProbe:
             httpGet:
               path: /admin/
@@ -52,8 +31,12 @@ spec:
               cpu: 100m
               memory: 512Mi
           volumeMounts:
-            - mountPath: /dags
+            - mountPath: /opt/airflow/dags
               name: git
+            - mountPath: /opt/airflow/airflow.cfg
+              subPath: airflow.cfg
+              name: config
+              readOnly: true
         - name: git-sync
           image: k8s.gcr.io/git-sync:v3.1.6
           env:
@@ -73,6 +56,9 @@ spec:
       volumes:
         - name: git
           emptyDir: {}
+        - name: config
+          configMap:
+            name: airflow-configmap
 ---
 apiVersion: v1
 kind: Service

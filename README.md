@@ -82,23 +82,23 @@ watch kubectl -nairflow get pods
 ```
 
 ## Apply airflow k8s resources
+Note: don't run the DAG(s) yet!
 ```shell
+kubectl apply -f configmap.yaml
 kubectl apply -f webserver.yaml
 kubectl apply -f scheduler.yaml
 ```
 
-You can now visit [airflow](http://airflow.local/admin/).
-
-Note: it can take several minutes before the DAGs show up.
+Now visit [airflow](http://airflow.local/admin/).
 
 ## Create S3 connection in airflow
 - Admin > Connections > Create
 - Conn Id: localstack_s3
 - Conn Type: S3
-- Extra: {"host": "http://localstack:4566","aws_access_key_id":"123", "aws_secret_access_key": "abc"}
+- Extra: `{"host": "http://localstack:4566","aws_access_key_id":"123", "aws_secret_access_key": "abc"}`
 
 ## Test DAG
-Once the DAG shows up (takes some time at the beginning), then enable and run it.
+You can now run the DAG(s).
 
 ## Tear down
 ```shell
@@ -111,10 +111,9 @@ k3d delete --name airflow
 - ~start a pod for dag~
 - ~pod image?~
 - ~dags from git~
-- logs in UI
+- ~logs in UI~
 - convert this to a script to start it all
 - generate airflow db user password
 - separate namespaces for airflow webserver/scheduler and pods running as part of dags?
 - connection setup (s3)
 - ~s3 bucket setup (airflow)~
-- auto-generate fernet key
