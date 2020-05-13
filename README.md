@@ -93,8 +93,8 @@ Now visit [airflow](http://airflow.local/admin/).
 
 ## Create S3 connection in airflow
 - Admin > Connections > Create
-- Conn Id: localstack_s3
-- Conn Type: S3
+- Conn Id: `localstack_s3`
+- Conn Type: `S3`
 - Extra: `{"host": "http://localstack:4566","aws_access_key_id":"123", "aws_secret_access_key": "abc"}`
 
 ## Test DAG
