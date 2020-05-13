@@ -25,20 +25,10 @@ spec:
           env:
             - name: AIRFLOW__CORE__SQL_ALCHEMY_CONN
               value: postgresql://airflow:password@airflow-postgresql:5432/airflow
-            - name: AIRFLOW__CORE__EXECUTOR
-              value: KubernetesExecutor
             - name: AIRFLOW__CORE__FERNET_KEY
               value: PUlSbKcKvEHVJew0x6tLlHOIjjTTlpzU8KRJE5vItXM=
-            - name: AIRFLOW_CONN_LOCALSTACK_S3
-              value: "s3://?aws_access_key_id=123&aws_secret_access_key=123&host=http%3A%2F%2Flocalstack%3A4566"
-            - name: AIRFLOW__KUBERNETES__GIT_REPO
-              value: https://github.com/jtnz/airflow-in-k8s-experiment.git
-            - name: AIRFLOW__KUBERNETES__GIT_BRANCH
-              value: master
-            - name: AIRFLOW__KUBERNETES__GIT_SUBPATH
-              value: dags
-            - name: AIRFLOW__KUBERNETES__GIT_DAGS_FOLDER_MOUNT_POINT
-              value: /dags
+            # - name: AIRFLOW_CONN_LOCALSTACK_S3
+            #   value: "s3://?aws_access_key_id=123&aws_secret_access_key=123&host=http%3A%2F%2Flocalstack%3A4566"
             - name: AIRFLOW__CORE__DAGS_FOLDER
               value: /dags/repo/dags
             - name: AIRFLOW__CORE__REMOTE_LOGGING
@@ -51,9 +41,8 @@ spec:
               value: DEBUG
             - name: AIRFLOW__CORE__LOGGING_CONFIG_CLASS
               value: airflow.config.logging_config.LOGGING_CONFIG
-              # value: airflow.config_templates.airflow_local_settings.DEFAULT_LOGGING_CONFIG
-            - name: AIRFLOW__CORE__TASK_LOG_READER
-              value: s3.task
+            # - name: AIRFLOW__CORE__TASK_LOG_READER
+            #   value: s3.task
           readinessProbe:
             httpGet:
               path: /admin/
