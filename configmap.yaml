@@ -9,6 +9,7 @@ data:
     executor = KubernetesExecutor
     load_examples = False
     load_default_connections = False
+    dags_folder = /opt/airflow/dags/repo/dags
 
     remote_logging = True
     logging_config_class = airflow.config.logging_config.LOGGING_CONFIG
