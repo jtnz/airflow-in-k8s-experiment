@@ -4,6 +4,8 @@ from airflow.operators.bash_operator import BashOperator
 from airflow.operators.python_operator import PythonOperator
 from airflow.utils.dates import days_ago
 
+from libs import FOO
+
 default_args = {
     'owner': 'jeff',
     'depends_on_past': False,
@@ -25,6 +27,7 @@ dag = DAG(
 def print_context(ds, **kwargs):
     print(kwargs)
     print(ds)
+    print(FOO)
     return 'Whatever you return gets printed in the logs'
 
 
