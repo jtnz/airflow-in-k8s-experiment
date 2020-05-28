@@ -85,8 +85,10 @@ watch kubectl -nairflow get pods
 Note: don't run the DAG(s) yet!
 ```shell
 kubectl apply -f configmap.yaml
-kubectl apply -f webserver.yaml
-kubectl apply -f scheduler.yaml
+kubectl apply -f service.yaml
+kubectl apply -f ingress.yaml
+kubectl apply -f rbac.yaml
+kubectl apply -f deployment.yaml
 ```
 
 Now visit [airflow](http://airflow.local/admin/).

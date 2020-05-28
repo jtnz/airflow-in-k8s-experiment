@@ -1,8 +1,7 @@
----
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: airflow-configmap
+  name: airflow-config
   namespace: airflow
 data:
   airflow.cfg: |
@@ -29,7 +28,7 @@ data:
     dags_are_paused_at_creation = False
 
     [kubernetes]
-    airflow_configmap = airflow-configmap
+    airflow_configmap = airflow-config
     namespace = airflow
     git_repo = https://github.com/jtnz/airflow-in-k8s-experiment.git
     git_branch = master

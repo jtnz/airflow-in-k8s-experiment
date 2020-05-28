@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: airflow
+  namespace: airflow
+  labels:
+    app: airflow
+spec:
+  rules:
+    - host: airflow.local
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: airflow
+              servicePort: http

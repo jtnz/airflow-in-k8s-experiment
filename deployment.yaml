@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: airflow
+  namespace: airflow
+  labels:
+    app: airflow
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: airflow
+      version.type: released
+  template:
+    metadata:
+      labels:
+        app: airflow
+        version.type: released
+    spec:
+      enableServiceLinks: false
+      serviceAccountName: airflow
+      terminationGracePeriodSeconds: 60
+      initContainers:
+      - name: upgradedb
+        image: registry.local:5000/airflow
+        imagePullPolicy: Always
+        args:
+        - upgradedb
+        resources:
+          requests:
+            cpu: 100m
+            memory: 512Mi
+        volumeMounts:
+        - mountPath: /opt/airflow/airflow.cfg
+          subPath: airflow.cfg
+          name: config
+          readOnly: true
+      containers:
+      - name: webserver
+        image: registry.local:5000/airflow
+        imagePullPolicy: Always
+        args:
+        - webserver
+        ports:
+        - containerPort: 8080
+          name: http
+        readinessProbe:
+          httpGet:
+            path: /admin/
+            port: http
+        resources:
+          requests:
+            cpu: 100m
+            memory: 512Mi
+        volumeMounts:
+        - mountPath: /opt/airflow/dags
+          name: dags
+          readOnly: true
+        - mountPath: /opt/airflow/airflow.cfg
+          subPath: airflow.cfg
+          name: config
+          readOnly: true
+      - name: scheduler
+        image: registry.local:5000/airflow
+        imagePullPolicy: Always
+        args:
+        - scheduler
+        resources:
+          requests:
+            cpu: 100m
+            memory: 512Mi
+        volumeMounts:
+        - mountPath: /opt/airflow/dags
+          name: dags
+          readOnly: true
+        - mountPath: /opt/airflow/airflow.cfg
+          subPath: airflow.cfg
+          name: config
+          readOnly: true
+      - name: git-sync
+        image: k8s.gcr.io/git-sync:v3.1.6
+        env:
+        - name: GIT_SYNC_REPO
+          value: https://github.com/jtnz/airflow-in-k8s-experiment.git
+        - name: GIT_SYNC_BRANCH
+          value: master
+        - name: GIT_SYNC_DEST
+          value: repo
+        resources:
+          requests:
+            cpu: 10m
+            memory: 128Mi
+        volumeMounts:
+        - mountPath: /tmp/git
+          name: dags
+      volumes:
+      - name: dags
+        emptyDir: {}
+      - name: config
+        configMap:
+          name: airflow-config

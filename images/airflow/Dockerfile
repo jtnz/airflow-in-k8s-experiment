@@ -25,3 +25,5 @@ COPY py/ /usr/local/lib/python3.6/site-packages/airflow
 USER airflow
 
 ENTRYPOINT [ "airflow" ]
+
+CMD [ "--help" ]
