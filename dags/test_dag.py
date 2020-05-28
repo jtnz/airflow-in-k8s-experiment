@@ -1,6 +1,7 @@
 from datetime import timedelta
 from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
+from airflow.operators.python_operator import PythonOperator
 from airflow.utils.dates import days_ago
 
 default_args = {
@@ -18,6 +19,20 @@ dag = DAG(
     default_args=default_args,
     description='A simple tutorial DAG',
     schedule_interval=timedelta(days=1),
+)
+
+
+def print_context(ds, **kwargs):
+    print(kwargs)
+    print(ds)
+    return 'Whatever you return gets printed in the logs'
+
+
+run_this = PythonOperator(
+    task_id='print_the_context',
+    provide_context=True,
+    python_callable=print_context,
+    dag=dag,
 )
 
 # t1, t2 and t3 are examples of tasks created by instantiating operators
@@ -59,4 +74,4 @@ t3 = BashOperator(
     dag=dag,
 )
 
-t1 >> [t2, t3]
+run_this >> t1 >> [t2, t3]
