@@ -4,7 +4,7 @@ from airflow.operators.bash_operator import BashOperator
 from airflow.operators.python_operator import PythonOperator
 from airflow.utils.dates import days_ago
 
-from .libs import FOO
+from libs import FOO
 
 default_args = {
     'owner': 'jeff',

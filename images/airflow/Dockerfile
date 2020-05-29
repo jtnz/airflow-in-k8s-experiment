@@ -18,7 +18,7 @@ RUN set -x \
     && mkdir -p ${DAG_DIR} \
     && chown airflow:airflow -R ${AIRFLOW_HOME}
 
-WORKDIR ${AIRFLOW_HOME}
+WORKDIR ${AIRFLOW_HOME}/dags/repo/dags
 
 COPY py/ /usr/local/lib/python3.6/site-packages/airflow
 
